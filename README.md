@@ -5,8 +5,14 @@ A complete, production-ready banking backend system built with FastAPI, PostgreS
 ### Money Transfer
 ![Transfer](1.png)
 
-###Login
+### Login
 ![Login](login.png)
+
+### Account Management
+![Accounts](accounts.png)
+
+### Admin Dashboard
+![Admin Dashboard](admin.png)
 ## 📋 Features Implemented
 
 ### ✅ Core Features (All from Requirements)
