@@ -13,6 +13,8 @@ A complete, production-ready banking backend system built with FastAPI, PostgreS
 
 ### Admin Dashboard
 ![Admin Dashboard](admin.png)
+
+![Admin Dashboard](test_case.png)
 ## 📋 Features Implemented
 
 ### ✅ Core Features (All from Requirements)
