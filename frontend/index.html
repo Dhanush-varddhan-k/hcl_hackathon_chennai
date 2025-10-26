@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartBank - Modular Banking System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            color: #374151;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .account-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .account-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .account-card .balance {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .transaction-item {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .transaction-item.flagged {
+            border-left-color: #ef4444;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th,
+        table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        table th {
+            background: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        table tr:hover {
+            background: #f9fafb;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-approved {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card h3 {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .value {
+            color: #667eea;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏦 SmartBank</h1>
+            <p>Modular Banking Backend System</p>
+            <div id="userInfo" class="hidden">
+                <p>Welcome, <span id="userName"></span> (<span id="userRole"></span>)</p>
+                <div class="nav-buttons">
+                    <button class="btn btn-primary" onclick="showDashboard()">Dashboard</button>
+                    <button class="btn btn-primary" onclick="showAccounts()">Accounts</button>
+                    <button class="btn btn-primary" onclick="showTransfer()">Transfer</button>
+                    <button class="btn btn-primary" onclick="showLoans()">Loans</button>
+                    <button class="btn btn-secondary" id="adminBtn" onclick="showAdmin()" style="display:none;">Admin</button>
+                    <button class="btn btn-secondary" id="auditorBtn" onclick="showAudit()" style="display:none;">Audit</button>
+                    <button class="btn btn-danger" onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Auth Section -->
+        <div id="authSection">
+            <div class="card">
+                <h2>Login</h2>
+                <div id="authAlert"></div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" value="admin@smartbank.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" value="admin123">
+                </div>
+                <button class="btn btn-primary" onclick="login()">Login</button>
+                <button class="btn btn-secondary" onclick="showRegister()">Register</button>
+            </div>
+
+            <div id="registerSection" class="card hidden">
+                <h2>Register</h2>
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="regName">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="regEmail">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="regPassword">
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="text" id="regPhone">
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <textarea id="regAddress"></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="register()">Register</button>
+                <button class="btn btn-secondary" onclick="showLogin()">Back to Login</button>
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboardSection" class="hidden">
+            <div id="dashboardContent" class="loading">Loading dashboard...</div>
+        </div>
+
+        <!-- Accounts Section -->
+        <div id="accountsSection" class="hidden">
+            <div class="card">
+                <h2>Create New Account</h2>
+                <div id="accountAlert"></div>
+                <div class="form-group">
+                    <label>Account Type</label>
+                    <select id="accountType">
+                        <option value="savings">Savings</option>
+                        <option value="current">Current</option>
+                        <option value="fd">Fixed Deposit</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="createAccount()">Create Account</button>
+            </div>
+
+            <div class="card">
+                <h2>My Accounts</h2>
+                <div id="accountsList" class="loading">Loading accounts...</div>
+            </div>
+        </div>
+
+        <!-- Transfer Section -->
+        <div id="transferSection" class="hidden">
+            <div class="card">
+                <h2>Money Transfer</h2>
+                <div id="transferAlert"></div>
+                <div class="form-group">
+                    <label>From Account</label>
+                    <select id="fromAccount"></select>
+                </div>
+                <div class="form-group">
+                    <label>To Account Number</label>
+                    <input type="text" id="toAccount">
+                </div>
+                <div class="form-group">
+                    <label>Amount</label>
+                    <input type="number" id="transferAmount" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" id="transferDesc">
+                </div>
+                <button class="btn btn-primary" onclick="transfer()">Transfer</button>
+            </div>
+
+            <div class="card">
+                <h2>Recent Transactions</h2>
+                <div id="transactionsList" class="loading">Loading transactions...</div>
+            </div>
+        </div>
+
+        <!-- Loans Section -->
+        <div id="loansSection" class="hidden">
+            <div class="card">
+                <h2>Apply for Loan</h2>
+                <div id="loanAlert"></div>
+                <div class="form-group">
+                    <label>Loan Type</label>
+                    <select id="loanType">
+                        <option value="personal">Personal Loan</option>
+                        <option value="home">Home Loan</option>
+                        <option value="car">Car Loan</option>
+                        <option value="education">Education Loan</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Amount</label>
+                    <input type="number" id="loanAmount" step="1000">
+                </div>
+                <div class="form-group">
+                    <label>Tenure (months)</label>
+                    <input type="number" id="loanTenure">
+                </div>
+                <button class="btn btn-primary" onclick="applyLoan()">Apply</button>
+            </div>
+
+            <div class="card">
+                <h2>My Loans</h2>
+                <div id="loansList" class="loading">Loading loans...</div>
+            </div>
+        </div>
+
+        <!-- Admin Section -->
+        <div id="adminSection" class="hidden">
+            <div class="card">
+                <h2>Loan Applications</h2>
+                <div id="adminLoansList" class="loading">Loading loan applications...</div>
+            </div>
+
+            <div class="card">
+                <h2>Flagged Transactions</h2>
+                <div id="flaggedTransactionsList" class="loading">Loading flagged transactions...</div>
+            </div>
+        </div>
+
+        <!-- Audit Section -->
+        <div id="auditSection" class="hidden">
+            <div class="card">
+                <h2>Audit Logs</h2>
+                <div id="auditLogsList" class="loading">Loading audit logs...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000/api';
+        let token = null;
+        let currentUser = null;
+
+        // Utility functions
+        function showAlert(elementId, message, type) {
+            const alertDiv = document.getElementById(elementId);
+            alertDiv.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            setTimeout(() => alertDiv.innerHTML = '', 5000);
+        }
+
+        function hideAllSections() {
+            document.querySelectorAll('[id$="Section"]').forEach(el => el.classList.add('hidden'));
+        }
+
+        async function apiCall(endpoint, method = 'GET', body = null) {
+            const options = {
+                method,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+
+            if (token) {
+                options.headers['Authorization'] = `Bearer ${token}`;
+            }
+
+            if (body) {
+                options.body = JSON.stringify(body);
+            }
+
+            const response = await fetch(`${API_URL}${endpoint}`, options);
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.detail || 'Request failed');
+            }
+
+            return data;
+        }
+
+        // Auth functions
+        async function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const data = await apiCall('/login', 'POST', { email, password });
+                token = data.access_token;
+                currentUser = data.user;
+
+                document.getElementById('userName').textContent = currentUser.full_name;
+                document.getElementById('userRole').textContent = currentUser.role;
+                document.getElementById('userInfo').classList.remove('hidden');
+                document.getElementById('authSection').classList.add('hidden');
+
+                if (currentUser.role === 'admin') {
+                    document.getElementById('adminBtn').style.display = 'inline-block';
+                }
+                if (currentUser.role === 'auditor') {
+                    document.getElementById('auditorBtn').style.display = 'inline-block';
+                }
+
+                showDashboard();
+            } catch (error) {
+                showAlert('authAlert', error.message, 'error');
+            }
+        }
+
+        async function register() {
+            const data = {
+                full_name: document.getElementById('regName').value,
+                email: document.getElementById('regEmail').value,
+                password: document.getElementById('regPassword').value,
+                phone: document.getElementById('regPhone').value,
+                address: document.getElementById('regAddress').value
+            };
+
+            try {
+                await apiCall('/register', 'POST', data);
+                showAlert('authAlert', 'Registration successful! Please login.', 'success');
+                showLogin();
+            } catch (error) {
+                showAlert('authAlert', error.message, 'error');
+            }
+        }
+
+        function showRegister() {
+            document.getElementById('registerSection').classList.remove('hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('registerSection').classList.add('hidden');
+        }
+
+        function logout() {
+            token = null;
+            currentUser = null;
+            document.getElementById('userInfo').classList.add('hidden');
+            document.getElementById('authSection').classList.remove('hidden');
+            hideAllSections();
+        }
+
+        // Dashboard
+        async function showDashboard() {
+            hideAllSections();
+            document.getElementById('dashboardSection').classList.remove('hidden');
+
+            try {
+                const data = await apiCall('/dashboard');
+                
+                const html = `
+                    <div class="dashboard-stats">
+                        <div class="stat-card">
+                            <h3>Total Accounts</h3>
+                            <div class="value">${data.summary.total_accounts}</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Total Balance</h3>
+                            <div class="value">₹${data.summary.total_balance.toFixed(2)}</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Active Loans</h3>
+                            <div class="value">${data.summary.active_loans}</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2>Recent Transactions</h2>
+                        ${data.recent_transactions.map(t => `
+                            <div class="transaction-item">
+                                <strong>${t.type.toUpperCase()}</strong> - ₹${t.amount}
+                                <div style="color: #6b7280; font-size: 12px;">${new Date(t.timestamp).toLocaleString()}</div>
+                            </div>
+                        `).join('') || '<p>No recent transactions</p>'}
+                    </div>
+
+                    <div class="card">
+                        <h2>Loan Status</h2>
+                        ${data.loan_status.map(l => `
+                            <div class="transaction-item">
+                                <strong>${l.loan_type}</strong> - EMI: ₹${l.emi}
+                                <span class="badge badge-${l.status}">${l.status}</span>
+                            </div>
+                        `).join('') || '<p>No loans</p>'}
+                    </div>
+                `;
+
+                document.getElementById('dashboardContent').innerHTML = html;
+            } catch (error) {
+                document.getElementById('dashboardContent').innerHTML = `<div class="alert alert-error">${error.message}</div>`;
+            }
+        }
+
+        // Accounts
+        async function showAccounts() {
+            hideAllSections();
+            document.getElementById('accountsSection').classList.remove('hidden');
+            await loadAccounts();
+        }
+
+        async function loadAccounts() {
+            try {
+                const data = await apiCall('/accounts');
+                
+                if (data.accounts.length === 0) {
+                    document.getElementById('accountsList').innerHTML = '<p>No accounts found. Create one above!</p>';
+                    return;
+                }
+
+                const html = `
+                    <div class="grid">
+                        ${data.accounts.map(acc => `
+                            <div class="account-card">
+                                <h3>${acc.account_type.toUpperCase()} Account</h3>
+                                <div style="opacity: 0.8;">Account: ${acc.account_number}</div>
+                                <div class="balance">₹${acc.balance.toFixed(2)}</div>
+                                <div style="opacity: 0.8;">Daily Limit: ₹${acc.daily_limit.toFixed(2)}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+
+                document.getElementById('accountsList').innerHTML = html;
+
+                // Update transfer dropdown
+                const select = document.getElementById('fromAccount');
+                select.innerHTML = data.accounts.map(acc => 
+                    `<option value="${acc.account_number}">${acc.account_type} - ${acc.account_number}</option>`
+                ).join('');
+            } catch (error) {
+                document.getElementById('accountsList').innerHTML = `<div class="alert alert-error">${error.message}</div>`;
+            }
+        }
+
+        async function createAccount() {
+            const accountType = document.getElementById('accountType').value;
+
+            try {
+                const data = await apiCall('/accounts', 'POST', { account_type: accountType });
+                showAlert('accountAlert', `Account created! Account number: ${data.account_number}`, 'success');
+                await loadAccounts();
+            } catch (error) {
+                showAlert('accountAlert', error.message, 'error');
+            }
+        }
+
+        // Transfer
+        async function showTransfer() {
+            hideAllSections();
+            document.getElementById('transferSection').classList.remove('hidden');
+            await loadAccounts();
+            await loadTransactions();
+        }
+
+        async function loadTransactions() {
+            try {
+                const data = await apiCall('/transactions');
+                
+                if (data.transactions.length === 0) {
+                    document.getElementById('transactionsList').innerHTML = '<p>No transactions yet</p>';
+                    return;
+                }
+
+                const html = data.transactions.map(t => `
+                    <div class="transaction-item ${t.is_flagged ? 'flagged' : ''}">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong>${t.type.toUpperCase()}</strong>
+                                ${t.is_flagged ? '<span class="badge badge-rejected">FLAGGED</span>' : ''}
+                                <div>From: ${t.from_account || 'N/A'} → To: ${t.to_account || 'N/A'}</div>
+                                <div style="color: #6b7280; font-size: 12px;">${t.description}</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <strong>₹${t.amount}</strong>
+                                <div style="color: #6b7280; font-size: 12px;">${new Date(t.timestamp).toLocaleString()}</div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                document.getElementById('transactionsList').innerHTML = html;
+            } catch (error) {
+                document.getElementById('transactionsList').innerHTML = `<div class="alert alert-error">${error.message}</div>`;
+            }
+        }
+
+        async function transfer() {
+            const data = {
+                from_account_number: document.getElementById('fromAccount').value,
+                to_account_number: document.getElementById('toAccount').value,
+                amount: parseFloat(document.getElementById('transferAmount').value),
+                description: document.getElementById('transferDesc').value
+            };
+
+            try {
+                const result = await apiCall('/transfer', 'POST', data);
+                let message = `Transfer successful! New balance: ₹${result.new_balance}`;
+                if (result.is_flagged) {
+                    message += ' (Transaction flagged for review)';
+                }
+                showAlert('transferAlert', message, result.is_flagged ? 'warning' : 'success');
+                await loadTransactions();
+                await loadAccounts();
+                
+                // Clear form
+                document.getElementById('transferAmount').value = '';
+                document.getElementById('transferDesc').value = '';
+                document.getElementById('toAccount').value = '';
+            } catch (error) {
+                showAlert('transferAlert', error.message, 'error');
+            }
+        }
+
+        // Loans
+        async function showLoans() {
+            hideAllSections();
+            document.getElementById('loansSection').classList.remove('hidden');
+            await loadLoans();
+        }
+
+        async function loadLoans() {
+            try {
+                const data = await apiCall('/loans');
+                
+                if (data.loans.length === 0) {
+                    document.getElementById('loansList').innerHTML = '<p>No loans yet</p>';
+                    return;
+                }
+
+                const html = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Loan Type</th>
+                                <th>Amount</th>
+                                <th>Tenure</th>
+                                <th>EMI</th>
+                                <th>Status</th>
+                                <th>Applied On</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data.loans.map(loan => `
+                                <tr>
+                                    <td>${loan.loan_type}</td>
+                                    <td>₹${loan.amount}</td>
+                                    <td>${loan.tenure} months</td>
+                                    <td>₹${loan.emi}</td>
+                                    <td><span class="badge badge-${loan.status}">${loan.status}</span></td>
+                                    <td>${new Date(loan.created_at).toLocaleDateString()}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+
+                document.getElementById('loansList').innerHTML = html;
+            } catch (error) {
+                document.getElementById('loansList').innerHTML = `<div class="alert alert-error">${error.message}</div>`;
+            }
+        }
+
+        async function applyLoan() {
+            const data = {
+                loan_type: document.getElementById('loanType').value,
+                amount: parseFloat(document.getElementById('loanAmount').value),
+                tenure: parseInt(document.getElementById('loanTenure').value)
+            };
+
+            try {
+                const result = await apiCall('/loans/apply', 'POST', data);
+                showAlert('loanAlert', `Loan application submitted! EMI: ₹${result.emi}`, 'success');
+                await loadLoans();
+                
+                // Clear form
+                document.getElementById('loanAmount').value = '';
+                document.getElementById('loanTenure').value = '';
+            } catch (error) {
+                showAlert('loanAlert', error.message, 'error');
+            }
+        }
+
+        // Admin
+        async function showAdmin() {
+            hideAllSections();
+            document.getElementById('adminSection').classList.remove('hidden');
+            await loadAdminLoans();
+            await loadFlaggedTransactions();
+        }
+
+        async function loadAdminLoans() {
+            try {
+                const data = await apiCall('/admin/loans');
+                
+                const html = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Loan Type</th>
+                                <th>Amount</th>
+                                <th>Tenure</th>
+                                <th>EMI</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data.loans.map(loan => `
+                                <tr>
+                                    <td>${loan.customer_name}</td>
+                                    <td>${loan.loan_type}</td>
+                                    <td>₹${loan.amount}</td>
+                                    <td>${loan.tenure} months</td>
+                                    <td>₹${loan.emi}</td>
+                                    <td><span class="badge badge-${loan.status}">${loan.status}</span></td>
+                                    <td>
+                                        ${loan.status === 'pending' ? `
+                                            <button class="btn btn-primary" onclick="approveLoan(${loan.id}, true)">Approve</button>
+                                            <button class="btn btn-danger" onclick="approveLoan(${loan.id}, false)">Reject</button>
+                                        ` : '-'}
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+
+                document.getElementById('adminLoansList').innerHTML = html;
+            } catch (error) {
+                document.getElementById('adminLoansList').innerHTML = `<div class="alert alert-error">${error.message}</div>`;
+            }
+        }
+
+        async function approveLoan(loanId, approved) {
+            try {
+                await apiCall('/admin/loans/approve', 'POST', { loan_id: loanId, approved });
+                await loadAdminLoans();
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+        async function loadFlaggedTransactions() {
+            try {
+                const data = await apiCall('/admin/flagged-transactions');
+                
+                if (data.flagged_transactions.length === 0) {
+                    document.getElementById('flaggedTransactionsList').innerHTML = '<p>No flagged transactions</p>';
+                    return;
+                }
+
+                const html = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>From Account</th>
+                                <th>To Account</th>
+                                <th>Amount</th>
+                                <th>Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data.flagged_transactions.map(t => `
+                                <tr>
+                                    <td>${t.id}</td>
+                                    <td>${t.from_account || 'N/A'}</td>
+                                    <td>${t.to_account || 'N/A'}</td>
+                                    <td>₹${t.amount}</td>
+                                    <td>${new Date(t.timestamp).toLocaleString()}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+
+                document.getElementById('flaggedTransactionsList').innerHTML = html;
+            } catch (error) {
+                document.getElementById('flaggedTransactionsList').innerHTML = `<div class="alert alert-error">${error.message}</div>`;
+            }
+        }
+
+        // Audit
+        async function showAudit() {
+            hideAllSections();
+            document.getElementById('auditSection').classList.remove('hidden');
+            await loadAuditLogs();
+        }
+
+        async function loadAuditLogs() {
+            try {
+                const data = await apiCall('/audit/logs');
+                
+                const html = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Action</th>
+                                <th>IP Address</th>
+                                <th>Details</th>
+                                <th>Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data.audit_logs.map(log => `
+                                <tr>
+                                    <td>${log.user_id}</td>
+                                    <td>${log.action}</td>
+                                    <td>${log.ip_address}</td>
+                                    <td>${log.details}</td>
+                                    <td>${new Date(log.timestamp).toLocaleString()}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+
+                document.getElementById('auditLogsList').innerHTML = html;
+            } catch (error) {
+                document.getElementById('auditLogsList').innerHTML = `<div class="alert alert-error">${error.message}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>

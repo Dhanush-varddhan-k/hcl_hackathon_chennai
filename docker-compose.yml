@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: smartbank_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: smartbank
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - smartbank_network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: smartbank_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@smartbank.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - smartbank_network
+
+  backend:
+    build: ./backend
+    container_name: smartbank_backend
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/smartbank
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    volumes:
+      - ./backend:/app
+    networks:
+      - smartbank_network
+
+  frontend:
+    image: nginx:alpine
+    container_name: smartbank_frontend
+    ports:
+      - "3000:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+    networks:
+      - smartbank_network
+
+volumes:
+  postgres_data:
+
+networks:
+  smartbank_network:
+    driver: bridge
