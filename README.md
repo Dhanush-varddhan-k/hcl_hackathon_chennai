@@ -3,7 +3,7 @@
 A complete, production-ready banking backend system built with FastAPI, PostgreSQL, and modern web technologies.
 
 ### Money Transfer
-![Transfer](/1.png)
+![Transfer](1.png)
 
 ## 📋 Features Implemented
 
